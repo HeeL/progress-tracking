@@ -5,7 +5,7 @@
     "dev": "next",
     "build": "next build",
     "start": "next start",
-    "deploy": "now -n progress-tracking deploy"
+    "deploy": "now -n progress-tracking --public deploy"
   },
   "dependencies": {
     "@zeit/next-css": "^1.0.1",
