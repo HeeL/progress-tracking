@@ -10,14 +10,14 @@ const Index = ({ percentage }) => (
   </div>
 );
 
-Index.getInitialProps = () => {
-    const total = 500;
-    const remain = 250;
-    const percentage = (total - remain) * 100 / total;
+Index.getInitialProps = async () => {
+    const percentage = await fetch('https://www.holidaycheck.de/api/translations')
+      .then(result => result.json())
+      .then(response => (response.total - response.remain) * 100 / response.total)
+      .then(Math.round);
+
     return {
-        percentage
+      percentage
     };
-    // replace stubbed data with this api call
-    // fetch('https://www.holidaycheck.de/api/translations').then(result => result.json());
 }
 export default Index;
