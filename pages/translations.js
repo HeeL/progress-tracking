@@ -1,23 +1,26 @@
 import React from "react";
 import fetch from "isomorphic-unfetch";
-import { CircularProgressbar } from "react-circular-progressbar";
+import { CircularProgressbarWithChildren } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
 
-const Index = ({ percentage }) => (
-  <div style={{width: '85vh', textAlign: 'center', margin: 'auto'}}>
+const Index = ({ percentage, total, remain }) => (
+  <div style={{width: '85vh', textAlign: 'center', margin: 'auto', color: '#666'}}>
         <h1>Removed Translations</h1>
-        <CircularProgressbar value={percentage} text={`${percentage}%`} />
+        <CircularProgressbarWithChildren value={percentage} text={`${percentage}%`}>
+          <div style={{marginTop: '130px'}}>{remain} / {total}</div>
+        </CircularProgressbarWithChildren>
   </div>
 );
 
-Index.getInitialProps = async () => {
-    const percentage = await fetch('https://www.holidaycheck.de/api/translations')
+Index.getInitialProps = () => {
+    return fetch('https://www.holidaycheck.de/api/translations')
       .then(result => result.json())
-      .then(response => (response.total - response.remain) * 100 / response.total)
-      .then(Math.round);
-
-    return {
-      percentage
-    };
+      .then(response => {
+        return {
+          percentage: Math.round((response.total - response.remain) * 100 / response.total),
+          remain: response.remain,
+          total: response.total
+        }
+      });
 }
 export default Index;
